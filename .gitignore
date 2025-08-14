@@ -1,0 +1,37 @@
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+.venv/
+env/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Local repo clones
+cloned_repo/
+docs/
+
+# Environment variables / secrets
+.env
+*.env
+
+# IDE/project settings
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+
+# macOS-specific
+*.DS_Store
+
+# Windows-specific
+ehthumbs.db
