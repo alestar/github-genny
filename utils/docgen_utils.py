@@ -1,11 +1,12 @@
 # docgen.py
+from xml.etree.ElementTree import tostring
 
-import openai
-import os
+from utils.llm_client_utils import create_llm_client
 
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Set your API key as an environment variable
+llm_instance = create_llm_client(provider="groq", model="llama3-8b-8192")
 
-def generate_doc(code: str, model="gpt-4") -> str:
+
+def generate_doc_using_llm_client(code: str) -> str:
     """
     Generate documentation for a given block of code using ChatGPT.
     Returns a markdown-formatted summary.
@@ -29,16 +30,16 @@ def generate_doc(code: str, model="gpt-4") -> str:
         ```python
         {code[:3500]}  # Truncate if too long (adjustable)
         """
+
     try:
-        response = openai.ChatCompletion.create(
-                    model=model,
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant that writes technical documentation."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0.4,
-            max_tokens=1024,
-        )
-        return response['choices'][0]['message']['content']
+        response = llm_instance["client"].chat.completions.create(model=llm_instance["model"],
+                    messages=[
+                        {"role": "system", "content": "You are a helpful assistant that writes technical documentation."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.4,
+                    max_tokens=1024)
+        return response.choices[0].message.content
     except Exception as e:
         return f"❌ Error: {e}"
+
